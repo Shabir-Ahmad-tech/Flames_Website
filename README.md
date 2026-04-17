@@ -57,4 +57,4 @@ This is a **static production build**. No complex setup required.
 > [!TIP]
 > **Pro Tip for Agency Handover:** When presenting this to the client, highlight the mobile menu logic and the smooth scrolling. These "luxurious" details are what justify premium pricing.
 
-Produced with 🔥 by **The Premium Web Agency**.
+Produced with 🔥 by **S designs**.
