@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMES | Awaken Your Plate - Swat's #1 Fast Food</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;700&family=Lilita+One&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #E52B12;
+        }
+
+        body {
+            background-color: #000000;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Cinematic Noise Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+            opacity: 0.15;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .font-brand { font-family: 'Lilita One', cursive; }
+        .font-impact { font-family: 'Bangers', cursive; }
+        .font-slogan { font-family: 'Space Grotesk', sans-serif; }
+
+        .text-glow {
+            text-shadow: 0 0 30px rgba(229, 43, 18, 0.6);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .glass:hover {
+            background: rgba(229, 43, 18, 0.04);
+            border-color: rgba(229, 43, 18, 0.4);
+            box-shadow: 0 15px 40px rgba(229, 43, 18, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-red);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px var(--primary-red);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Bento Heights */
+        .bento-card {
+            min-height: 320px;
+        }
+        @media (min-width: 768px) {
+            .bento-card-wide { min-height: 400px; }
+            .bento-card-square { min-height: 400px; }
+        }
+
+        /* Infinite Marquee */
+        .marquee-container {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-content {
+            display: flex;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Mobile Menu */
+        #mobile-menu {
+            clip-path: circle(0% at 100% 0%);
+            transition: clip-path 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        #mobile-menu.active {
+            clip-path: circle(150% at 100% 0%);
+        }
+
+        /* Smooth Burger Float */
+        .burger-float {
+            animation: float 5s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+
+        /* Reviews Scroll */
+        .reviews-scroll {
+            display: flex;
+            animation: scroll 40s linear infinite;
+            width: max-content;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Premium Header -->
+    <nav class="fixed w-full z-[100] transition-all duration-500 top-0 px-6 py-4 md:px-12 flex justify-between items-center bg-transparent backdrop-blur-sm" id="main-nav">
+        <div class="flex flex-col group cursor-pointer">
+            <h1 class="font-impact text-4xl md:text-5xl tracking-wider leading-none group-hover:text-[#E52B12] transition-colors">FLAMES</h1>
+            <p class="font-slogan text-[10px] md:text-xs text-[#E52B12] italic font-bold tracking-tight">AWAKEN YOUR PLATE</p>
+        </div>
+        
+        <!-- Desktop Links -->
+        <div class="hidden lg:flex space-x-12 font-medium text-[11px] tracking-[0.3em] uppercase">
+            <a href="#menu" class="hover:text-[#E52B12] transition-colors">Experience</a>
+            <a href="#menu" class="hover:text-[#E52B12] transition-colors">Menu</a>
+            <a href="#reviews" class="hover:text-[#E52B12] transition-colors">Social</a>
+            <a href="#location" class="hover:text-[#E52B12] transition-colors">Find Us</a>
+        </div>
+
+        <!-- Desktop CTA -->
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="tel:+923066222666" class="btn-primary px-8 py-3 rounded-xl text-sm font-bold tracking-wider">
+                CALL NOW
+            </a>
+        </div>
+
+        <!-- Hamburger Icon -->
+        <button class="lg:hidden flex flex-col space-y-1.5 focus:outline-none z-[110]" id="menu-toggle">
+            <span class="w-8 h-0.5 bg-white transition-all duration-300" id="line1"></span>
+            <span class="w-8 h-0.5 bg-white transition-all duration-300" id="line2"></span>
+            <span class="w-5 h-0.5 bg-[#E52B12] self-end transition-all duration-300" id="line3"></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#000000] z-[90] flex flex-col items-center justify-center space-y-8 p-12">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        <a href="#menu" class="menu-link text-5xl font-impact tracking-widest hover:text-[#E52B12]">MENU</a>
+        <a href="#reviews" class="menu-link text-5xl font-impact tracking-widest hover:text-[#E52B12]">REVIEWS</a>
+        <a href="#location" class="menu-link text-5xl font-impact tracking-widest hover:text-[#E52B12]">LOCATION</a>
+        <div class="pt-12 w-full max-w-xs">
+            <a href="tel:+923066222666" class="btn-primary w-full py-5 rounded-2xl block text-center font-bold text-xl">ORDER NOW</a>
+        </div>
+        <div class="mt-8 text-gray-600 text-[10px] tracking-[0.4em] uppercase">Continental Plazas, Swat</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden px-6 md:px-12">
+        <div class="container mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
+            <!-- Left -->
+            <div class="space-y-10" id="hero-text">
+                <div class="inline-block px-4 py-1.5 border border-white/10 rounded-full bg-white/5 backdrop-blur-md">
+                    <p class="text-[10px] md:text-xs font-bold tracking-[0.4em] text-[#E52B12] uppercase">Award Winning Fast Food</p>
+                </div>
+                <h2 class="font-impact text-7xl md:text-[10rem] leading-[0.85] text-glow select-none">
+                    AWAKEN <br> <span class="text-[#E52B12]">YOUR</span> PLATE
+                </h2>
+                <p class="text-lg md:text-xl font-light text-gray-400 max-w-xl leading-relaxed">
+                    Swat's premier destination for artisanal <span class="text-white font-bold">Crown Crust Pizzas</span>, legendary <span class="text-white font-bold">Zinger Burgers</span>, and authentic flavors.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8 pt-6">
+                    <a href="#menu" class="btn-primary px-12 py-5 rounded-2xl font-bold text-lg tracking-wide uppercase">Unlock Menu</a>
+                    <a href="#location" class="px-12 py-5 rounded-2xl font-bold text-lg tracking-wide uppercase border border-white/10 hover:bg-white/5 transition-all text-center">Visit Us</a>
+                </div>
+            </div>
+
+            <!-- Right (Adaptive sizing) -->
+            <div class="relative flex justify-center items-center" id="hero-img">
+                <div class="absolute w-[120%] h-[120%] bg-[#E52B12] rounded-full filter blur-[180px] opacity-[0.08]"></div>
+                <img src="./assets/burger.png" alt="Zinger" class="w-full max-w-3xl burger-float relative z-10 drop-shadow-[0_45px_55px_rgba(229,43,18,0.4)] transition-all duration-700 hover:scale-105">
+            </div>
+        </div>
+    </section>
+
+    <!-- Scrolling Marquee -->
+    <div class="bg-[#E52B12] py-4 md:py-6 overflow-hidden -rotate-1 scale-105 z-30 relative marquee-container">
+        <div class="marquee-content whitespace-nowrap">
+            <span class="text-3xl md:text-5xl font-brand uppercase px-8">🔥 CROWN CRUST PIZZA 🔥 FRESH INGREDIENTS 🔥 SWAT'S #1 🔥 AWAKEN YOUR PLATE 🔥 CROWN CRUST PIZZA 🔥 FRESH INGREDIENTS 🔥 SWAT'S #1 🔥 AWAKEN YOUR PLATE 🔥</span>
+            <span class="text-3xl md:text-5xl font-brand uppercase px-8">🔥 CROWN CRUST PIZZA 🔥 FRESH INGREDIENTS 🔥 SWAT'S #1 🔥 AWAKEN YOUR PLATE 🔥 CROWN CRUST PIZZA 🔥 FRESH INGREDIENTS 🔥 SWAT'S #1 🔥 AWAKEN YOUR PLATE 🔥</span>
+        </div>
+    </div>
+
+    <!-- The Bento Favorites (Adaptive) -->
+    <section id="menu" class="py-40">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="max-w-3xl mb-24 space-y-4">
+                <h3 class="font-impact text-6xl md:text-8xl leading-none uppercase">The Flames <br> <span class="text-[#E52B12]">Masterpieces</span></h3>
+                <p class="text-gray-500 text-lg font-medium tracking-wide">Elite recipes designed to ignite your senses.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Burger (Hero Bento) -->
+                <div class="md:col-span-8 glass rounded-[3rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between group overflow-hidden bento-card-wide">
+                    <div class="md:w-1/2 space-y-8 z-10">
+                        <div class="inline-flex px-4 py-1.5 rounded-full bg-red-600/10 text-[#E52B12] text-xs font-black tracking-widest uppercase">Signature</div>
+                        <h4 class="font-brand text-5xl md:text-6xl mb-4 leading-none">The Zinger <br>Bomb</h4>
+                        <p class="text-gray-400 text-lg leading-relaxed">Artisan crispy patty with our secret spicy glaze. A texture revolution.</p>
+                        <p class="text-3xl font-black text-white">Rs 500 - 1,000</p>
+                    </div>
+                    <div class="md:w-1/2 relative h-full flex items-center justify-center mt-12 md:mt-0">
+                        <img src="./assets/burger.png" alt="Burger" class="w-full max-w-[400px] object-contain transition-all duration-700 group-hover:scale-110 group-hover:rotate-3">
+                    </div>
+                </div>
+
+                <!-- Pizza -->
+                <div class="md:col-span-4 glass rounded-[3rem] p-10 flex flex-col justify-between group overflow-hidden bento-card-square">
+                    <div class="relative h-64 md:h-72 mb-8 flex items-center justify-center">
+                        <img src="./assets/pizza.png" alt="Pizza" class="h-full w-auto object-contain transition-all duration-700 group-hover:scale-110 group-hover:-rotate-6">
+                    </div>
+                    <div>
+                        <h4 class="font-brand text-4xl mb-3">Crown Crust</h4>
+                        <p class="text-gray-500 text-sm font-bold uppercase tracking-widest">Global Favorite</p>
+                    </div>
+                </div>
+
+                <!-- Shawarma -->
+                <div class="md:col-span-4 glass rounded-[3rem] p-10 flex flex-col justify-between group overflow-hidden bento-card-square">
+                    <div>
+                        <h4 class="font-brand text-4xl mb-3">Arabian King</h4>
+                        <p class="text-gray-500 text-sm font-bold uppercase tracking-widest">Authentic Taste</p>
+                    </div>
+                    <div class="relative h-64 md:h-72 mt-8 flex items-center justify-center">
+                        <img src="./assets/shawarma.png" alt="Shawarma" class="h-full w-auto object-contain transition-all duration-700 group-hover:scale-110 group-hover:rotate-6">
+                    </div>
+                </div>
+
+                <!-- Promo -->
+                <div class="md:col-span-8 glass rounded-[3rem] p-12 bg-gradient-to-tr from-[#E52B12]/10 via-transparent to-transparent flex items-center justify-center border-[#E52B12]/20">
+                    <div class="text-center md:text-left md:flex items-center space-x-16">
+                        <h5 class="font-impact text-6xl md:text-9xl opacity-10 select-none leading-none">VIBE <br>ONLY</h5>
+                        <div class="space-y-4">
+                            <p class="text-[10px] md:text-sm font-black text-[#E52B12] uppercase tracking-[0.5em]">The Standard</p>
+                            <p class="text-gray-400 max-w-sm">We don't just sell food. We deliver memories wrapped in the finest ingredients Pakistan has to offer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof (Restored & Enhanced) -->
+    <section id="reviews" class="py-40 bg-[#070707] overflow-hidden border-y border-white/5">
+        <div class="container mx-auto px-6 md:px-12 mb-20 text-center md:text-left">
+            <h3 class="font-impact text-6xl md:text-8xl uppercase mb-6">Word On <span class="text-[#E52B12]">Swat</span></h3>
+            <div class="flex flex-wrap justify-center md:justify-start items-center gap-4">
+                <div class="flex text-yellow-500">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <span class="text-xs font-black uppercase tracking-[0.4em] text-gray-600">Top Rated Digital Cuisine</span>
+            </div>
+        </div>
+
+        <div class="reviews-container overflow-hidden">
+            <div class="reviews-scroll">
+                <!-- Review 1 -->
+                <div class="w-[350px] md:w-[450px] glass p-10 md:p-12 rounded-[3rem] mx-4 flex flex-col justify-between">
+                    <p class="text-xl md:text-2xl font-light italic leading-relaxed text-gray-300">"Exceptional taste and the ambiance is very beautiful. A must-visit spot in Swat!"</p>
+                    <div class="mt-8 flex items-center space-x-4 border-t border-white/5 pt-8">
+                        <div class="w-12 h-12 bg-[#E52B12] rounded-full flex items-center justify-center font-black">A</div>
+                        <div>
+                            <h5 class="font-bold text-lg">Aiman Fatima</h5>
+                            <p class="text-[10px] text-[#E52B12] font-black tracking-widest uppercase">Verified Visit</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 2 -->
+                <div class="w-[350px] md:w-[450px] glass p-10 md:p-12 rounded-[3rem] mx-4 flex flex-col justify-between">
+                    <p class="text-xl md:text-2xl font-light italic leading-relaxed text-gray-300">"Flames crown crust pizza is out of this world 😍. Cheesy perfection."</p>
+                    <div class="mt-8 flex items-center space-x-4 border-t border-white/5 pt-8">
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center font-black">F</div>
+                        <div>
+                            <h5 class="font-bold text-lg">Fatima Khan</h5>
+                            <p class="text-[10px] text-[#E52B12] font-black tracking-widest uppercase">Local Guide</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 3 -->
+                <div class="w-[350px] md:w-[450px] glass p-10 md:p-12 rounded-[3rem] mx-4 flex flex-col justify-between">
+                    <p class="text-xl md:text-2xl font-light italic leading-relaxed text-gray-300">"Everything from service to presentation was top-notch. The Chinese platter is a game-changer!"</p>
+                    <div class="mt-8 flex items-center space-x-4 border-t border-white/5 pt-8">
+                        <div class="w-12 h-12 bg-[#E52B12] rounded-full flex items-center justify-center font-black">Z</div>
+                        <div>
+                            <h5 class="font-bold text-lg">Zia Ullah</h5>
+                            <p class="text-[10px] text-[#E52B12] font-black tracking-widest uppercase">Elite Diner</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cloning for Loop -->
+                <div class="w-[350px] md:w-[450px] glass p-10 md:p-12 rounded-[3rem] mx-4 flex flex-col justify-between">
+                    <p class="text-xl md:text-2xl font-light italic leading-relaxed text-gray-300">"Exceptional taste and the ambiance is very beautiful. A must-visit spot in Swat!"</p>
+                    <div class="mt-8 flex items-center space-x-4 border-t border-white/5 pt-8">
+                        <div class="w-12 h-12 bg-[#E52B12] rounded-full flex items-center justify-center font-black">A</div>
+                        <div>
+                            <h5 class="font-bold text-lg">Aiman Fatima</h5>
+                            <p class="text-[10px] text-[#E52B12] font-black tracking-widest uppercase">Verified Visit</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cloning 2 -->
+                <div class="w-[350px] md:w-[450px] glass p-10 md:p-12 rounded-[3rem] mx-4 flex flex-col justify-between">
+                    <p class="text-xl md:text-2xl font-light italic leading-relaxed text-gray-300">"Flames crown crust pizza is out of this world 😍"</p>
+                    <div class="mt-8 flex items-center space-x-4 border-t border-white/5 pt-8">
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center font-black">F</div>
+                        <div>
+                            <h5 class="font-bold text-lg">Fatima Khan</h5>
+                            <p class="text-[10px] text-[#E52B12] font-black tracking-widest uppercase">Local Guide</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map/Action Section -->
+    <footer id="location" class="py-40 border-t border-white/5 bg-[#000000]">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid lg:grid-cols-2 gap-24">
+                <div class="space-y-12">
+                    <h4 class="font-impact text-7xl md:text-9xl leading-none">VISIT <br> <span class="text-[#E52B12]">US</span> NOW</h4>
+                    <div class="space-y-8">
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 rounded-2xl glass flex items-center justify-center text-[#E52B12] shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-xl mb-2">Location</h5>
+                                <p class="text-gray-500 font-medium">Continental Plazas, Saidu Sharif Rd, Makan Bagh Mingora, Swat</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-6">
+                            <div class="w-12 h-12 rounded-2xl glass flex items-center justify-center text-[#E52B12] shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-xl mb-2">Service Hours</h5>
+                                <p class="text-gray-500 font-medium">Open Daily: 11:00 AM — 12:00 AM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-12 md:p-16 rounded-[4rem] space-y-10 relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#E52B12] rounded-full blur-[80px] opacity-20"></div>
+                    <div class="space-y-4 relative z-10">
+                        <h4 class="font-brand text-5xl">Ready to taste?</h4>
+                        <p class="text-gray-400 text-lg">Whether you're looking for a quick bite or a family feast, Flames is ready to serve you the best meal of your life.</p>
+                    </div>
+                    <a href="tel:+923066222666" class="btn-primary w-full py-6 rounded-3xl flex justify-center items-center space-x-4 font-black text-2xl group transition-all">
+                        <span>CALL: +92 306 6222666</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-40 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-gray-700 text-[10px] tracking-[0.5em] font-black uppercase">
+                <p>&copy; 2026 FLAMES CAFE SWAT</p>
+                <div class="flex space-x-12">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                    <a href="https://www.instagram.com/flamescafeswat" class="text-white">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth Scroll initialization (Lenis)
+        const lenis = new Lenis()
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
+
+        // GSAP Setup
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const lines = {
+            l1: document.getElementById('line1'),
+            l2: document.getElementById('line2'),
+            l3: document.getElementById('line3')
+        };
+        const menuLinks = document.querySelectorAll('.menu-link');
+
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            mobileMenu.classList.toggle('active', isMenuOpen);
+            
+            if(isMenuOpen) {
+                gsap.to(lines.l1, { rotate: 45, y: 8, duration: 0.3 });
+                gsap.to(lines.l2, { opacity: 0, duration: 0.2 });
+                gsap.to(lines.l3, { rotate: -45, y: -8, width: '2rem', duration: 0.3 });
+                gsap.from('.menu-link', { y: 30, opacity: 0, stagger: 0.1, delay: 0.3 });
+            } else {
+                gsap.to(lines.l1, { rotate: 0, y: 0, duration: 0.3 });
+                gsap.to(lines.l2, { opacity: 1, duration: 0.2 });
+                gsap.to(lines.l3, { rotate: 0, y: 0, width: '1.25rem', duration: 0.3 });
+            }
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        menuLinks.forEach(link => link.addEventListener('click', () => {
+            if(isMenuOpen) toggleMenu();
+        }));
+
+        // Navbar Animation
+        gsap.to('#main-nav', {
+            scrollTrigger: {
+                trigger: 'body',
+                start: 'top -50',
+                toggleActions: 'play none none reverse'
+            },
+            backgroundColor: 'rgba(0,0,0,0.9)',
+            paddingTop: '16px',
+            paddingBottom: '16px',
+            duration: 0.4
+        });
+
+        // Hero Reveal
+        gsap.from('#hero-text div, #hero-text h2, #hero-text p, #hero-text div:last-child', {
+            y: 50,
+            opacity: 0,
+            stagger: 0.1,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+
+        // Bento Card Reveal
+        gsap.utils.toArray('.glass').forEach(card => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 90%',
+                },
+                y: 60,
+                opacity: 0,
+                duration: 1,
+                ease: 'power3.out'
+            });
+        });
+
+    </script>
+</body>
+</html>
